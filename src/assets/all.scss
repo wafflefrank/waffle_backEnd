@@ -1,0 +1,33 @@
+@import "../../node_modules/bootstrap/scss/functions";
+@import "./helpers/variables";
+@import "/node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+// 預色模式配色
+:root {
+    --primary-color: #695cfe;
+    --secondary-color: #f6f5ff;
+    --font-color: #424242;
+    --bg-color: #e4e9f7;
+    --heading-color: rgba(255, 255, 255, 0.733);
+    --bar-bg-color: rgba(255, 255, 255, 0.733);
+    // logo陰影
+    --logo-shadow-color: rgb(26, 24, 24);
+}
+// 深色模式配色
+[data-theme="dark"] {
+    --primary-color: #3a3b3c;
+    --secondary-color: #3a3b3c;
+    --font-color: #fefefe;
+    --bg-color: #7d7d80;
+    --heading-color: #3a3b3c;
+    --bar-bg-color: #3a3b3c;
+    // logo陰影
+    --logo-shadow-color: rgba(252, 252, 252, 0.75);
+}
+body {
+    transition: 0.4s;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}

@@ -22,6 +22,8 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 // google font
 import 'material-icons/iconfont/material-icons.css';
+// e-chart
+import * as echarts from 'echarts'; // e-charts 圓餅圖
 // 時間格式轉換
 import moment from 'moment';
 // 引入 I18n 套件
@@ -44,6 +46,8 @@ Object.keys(icons).forEach((key) => {
 app.config.globalProperties.library = library;
 app.config.globalProperties.fas = fas;
 app.config.globalProperties._ = _;
+// 圓餅圖
+app.config.globalProperties.$echarts = echarts;
 app.config.globalProperties.FontAwesomeIcon = FontAwesomeIcon;
 app.config.globalProperties.i18n = i18n;
 app.config.globalProperties.$isLoading = false; // 預設轉圈讀條關閉

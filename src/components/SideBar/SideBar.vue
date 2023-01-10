@@ -1,6 +1,7 @@
 <template>
   <header class="main-head" :class="[isExpand === false ? 'main_expand' : 'main-head']">
-    <img class="home_logo" src="../../assets/Logo/logo_kolapay.jpg" alt="#" />
+    <img class="home_logo" src="../../assets/Logo/photo_2022-12-14_14-09-58.jpg" alt="#" />
+    <hr class="mt-0 horizontal dark bg-white" style="height: 2px" />
     <nav class="head-nav">
       <ul class="menu">
         <li>
@@ -25,18 +26,7 @@
           <a href="#"> <i class="fa-solid fa-sack-dollar fs-2 ms-3"></i><span class="list_name">結算紀錄</span></a>
         </li>
         <li>
-          <a href="#"> <i class="fa-solid fa-unlock fs-2 ms-3"></i><span class="list_name">Google驗證器</span></a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa-solid fa-moon fs-2 ms-3"></i><span class="list_name me-3">Dark mode</span
-            ><el-switch
-              class="dark_switch"
-              :class="[isDark === true ? 'dark_switch' : 'white_switch']"
-              v-model="isDark"
-              style="--el-switch-on-color: #f2f2f2; --el-switch-off-color: #2c2c2c"
-              @change="toggleMode(isDark)"
-          /></a>
+          <a href="#"> <i class="fa-solid fa-unlock fs-2 ms-3"></i><span class="list_name">Google 驗證器</span></a>
         </li>
       </ul>
     </nav>
@@ -76,8 +66,6 @@ export default defineComponent({
     return {
       // 是否擴展
       isExpand: true,
-      // dark mode
-      isDark: true,
     };
   },
   methods: {
@@ -91,32 +79,8 @@ export default defineComponent({
         this.isExpand = true;
       }
     },
-    // 切換Dark模式
-    toggleMode(isDark) {
-      console.log(isDark);
-      if (this.isDark === false) {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-      } else if (this.isDark === true) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    },
   },
-  created() {
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    console.log(currentTheme);
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-
-      if (currentTheme === 'dark') {
-        this.isDark = true;
-        // toggleSwitch.checked = true;
-      } else {
-        this.isDark = false;
-      }
-    }
-  },
+  created() {},
 });
 </script>
 
@@ -126,7 +90,7 @@ $color-2: #fefefe;
 $pad: 0.925rem;
 
 .head-nav {
-  padding: 30px 20px;
+  padding: 10px 20px 60px;
   li {
     position: relative;
     clear: both;
@@ -202,15 +166,22 @@ $pad: 0.925rem;
 // 預設樣式
 .main-head {
   position: fixed;
-  bottom: 0;
-  // 展開後樣式
-  width: 280px;
   height: 100%;
+  // bottom: 0
+  // border-top-right-radius: 45px;
+  // border-top-left-radius: 45px;
+  // 展開後樣式
+  width: 250px;
+  // height: 100%;
   z-index: 1;
-  background: var(--bar-bg-color);
+  background: rgb(0 0 0 / 20%);
   transition: width 400ms; //寬度延伸效果
   box-shadow: 13px 1px 13px -6px rgba(0, 0, 0, 0.75);
   .head-nav {
+    ul {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
     // 展開文字動畫(1~8)延遲
     li {
       @for $i from 1 through 8 {
@@ -263,12 +234,18 @@ $pad: 0.925rem;
 // LOGO樣式
 .home_logo {
   border-radius: 10px;
-  width: 120px;
+  width: 100px;
   margin: 24px 25px 24px 40px;
   background: black;
   box-shadow: -1px 1px 24px 4px var(--logo-shadow-color);
   -webkit-box-shadow: -1px 1px 24px 4px var(--logo-shadow-color);
   -moz-box-shadow: -1px 1px 24px 4px var(--logo-shadow-color);
+}
+hr.horizontal {
+  background-color: transparent;
+}
+hr.horizontal.dark {
+  background-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4), transparent);
 }
 // 按鈕樣式
 .expand_btn {
@@ -281,7 +258,7 @@ $pad: 0.925rem;
   background: #082635;
   box-shadow: 2px 1px 3px 3px rgba(0, 0, 0, 0.3);
   left: 100%;
-  bottom: 1rem;
+  top: 8.5rem;
   text-align: center;
   display: flex;
   align-items: center;

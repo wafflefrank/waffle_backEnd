@@ -4,7 +4,8 @@
       <el-aside width="250px"><SideBar></SideBar></el-aside>
       <el-container>
         <el-header><HeadBar></HeadBar></el-header>
-        <el-main>Main</el-main>
+        <el-main><router-view></router-view></el-main>
+        <el-footer> <span class="text-white">KOLA ©2023</span></el-footer>
       </el-container>
     </el-container>
   </div>
@@ -31,5 +32,8 @@ export default {
 // }
 .el-header {
   padding: 0;
+}
+.el-main {
+  padding: 60px;
 }
 </style>

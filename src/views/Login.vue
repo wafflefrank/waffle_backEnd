@@ -6,20 +6,22 @@
       <p class="mt-5 text-white fs-2">歡迎回來 !</p>
       <!-- 帳號 -->
       <el-form-item label="帳號" prop="phone" class="addInput_style">
-        <el-input class="contentName_style" v-model.number="addForm_Data.phone" placeholder="請輸入"></el-input>
+        <el-input class="contentName_style" v-model="addForm_Data.phone" placeholder="請輸入"></el-input>
       </el-form-item>
       <!-- 密碼 -->
       <el-form-item label="密碼" prop="password" class="addInput_style">
-        <el-input class="contentName_style" v-model.number="addForm_Data.password" placeholder="請輸入" type="password"></el-input>
+        <el-input class="contentName_style" v-model="addForm_Data.password" placeholder="請輸入" type="password"></el-input>
         <!-- <i class="fa-regular fa-copy text-yellow" @click="copy()" @keydown="copy()"></i> -->
       </el-form-item>
       <!-- 驗證碼 -->
       <div class="d-flex align-items-center">
         <el-form-item label="驗證碼" prop="captcha" class="captchaInput_style">
-          <el-input class="contentName_style" v-model.number="addForm_Data.captcha" placeholder="請輸入" type="password"></el-input>
+          <el-input class="contentName_style" v-model="addForm_Data.captcha" placeholder="請輸入"></el-input>
           <!-- <i class="fa-regular fa-copy text-yellow" @click="copy()" @keydown="copy()"></i> -->
         </el-form-item>
-        <img src="https://pay.zaza.one/captcha.svg" @click="reflesh_captcha()" @keydown="reflesh_captcha()" alt="#" />
+        <div @click="reload_Captcha()" @keydown="reload_Captcha()">
+          <img v-if="isRouterAlive" :src="`/captcha.svg?=${new Date().getTime()}`" alt="#" />
+        </div>
       </div>
 
       <a href="#" class="px-5" @click.prevent="login()">
@@ -34,9 +36,18 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
+  provide() {
+    return {
+      reload_captcha: this.reload_Captcha,
+    };
+  },
   data() {
     return {
+      isRouterAlive: true,
+      wrongMsg: '',
       //   充值表單資料
       addForm_Data: {
         phone: '',
@@ -80,11 +91,34 @@ export default {
   methods: {
     login() {
       this.$http.post('/open/login', this.addForm_Data).then((res) => {
+        const loginMsg = res.data.msg;
         if (res.data.code === 200) {
-          console.log(res.data);
+          console.log(res.data.msg);
           this.$swal.fire('登入成功!', '登入成功', 'success');
-          localStorage.setItem('user', this.addForm_Data);
+          // localStorage.setItem('user', this.addForm_Data);
           this.$router.push('/');
+        } else if (res.data.code === 422) {
+          this.wrongMsg = _.findKey(loginMsg, ['param', 'phone']);
+          console.log(this.wrongMsg);
+          this.$swal.fire('登入失敗!', `${res.data.msg}`, 'error');
+          this.wrongMsg = _.findKey(loginMsg, ['param', 'password']);
+          console.log(this.wrongMsg);
+          this.$swal.fire('登入失敗!', `${res.data.msg}`, 'error');
+          this.wrongMsg = _.findKey(loginMsg, ['param', 'captcha']);
+          console.log(this.wrongMsg);
+          this.$swal.fire('登入失敗!', `${res.data.msg}`, 'error');
+
+          // console.log(res.data.msg.phone);
+          // if (res.data.msg.phone.param === 'phone') {
+          //   console.log(res.data.msg.phone.msg);
+          //   this.$swal.fire('登入失敗!', `${res.data.msg.phone.msg}`, 'error');
+          // } else if (res.data.msg.password.param === 'password') {
+          //   console.log(res.data.msg.password.msg);
+          //   this.$swal.fire('登入失敗!', `${res.data.msg.password.msg}`, 'error');
+          // } else if (res.data.msg.captcha.param === 'captcha') {
+          //   console.log(res.data.msg.captcha.msg);
+          //   this.$swal.fire('登入失敗!', `${res.data.msg.captcha.msg}`, 'error');
+          // }
         } else {
           console.log(res.data.msg);
           this.$swal.fire('登入失敗!', `${res.data.msg}`, 'error');
@@ -92,14 +126,22 @@ export default {
       });
     },
     reflesh_captcha() {
-      this.$http.get('/captcha.svg').then((res) => {
-        if (res.data.code === 200) {
-          console.log(res.img);
-        } else {
-          console.log(res.data.msg);
-        }
+      this.$http.get(`/captcha.svg?=${new Date().getTime()}`).then((res) => {
+        console.log(res.img);
       });
     },
+    // 重新整理
+    reload_Captcha() {
+      this.isRouterAlive = false;
+      this.$nextTick(() => {
+        // 刷新後執行
+        this.isRouterAlive = true;
+        this.reflesh_captcha();
+      });
+    },
+  },
+  created() {
+    this.reflesh_captcha();
   },
 };
 </script>
